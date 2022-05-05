@@ -5,9 +5,11 @@
 可參考 https://ithelp.ithome.com.tw/articles/10210071
 1.pip install playsound
 
-2.php qq.php init
+2.請申請tts_key https://www.voicerss.org/pricing/ 申請個免費的就可以 將api token存下來 等下執行load時會要求你輸入
 
-3.php qq.php load
+3..php qq.php init
+
+4..php qq.php load
 
 &nbsp;&nbsp;&nbsp;&nbsp;如果是第一次使用會需要登入telegram，會跳出提示 
   
