@@ -5,18 +5,10 @@ set_time_limit(0);
 class myProcess{
     private $app_id;
     private $api_hash;
+    private $tts_key;
     private $important_groups =[1400370402,1283996796,1362366154,1447023252,1283233252,703102017];
-    private $important_users = [592088422,1042442912,1129597748];
-    //客服群id
-    private $fae_group_id = 1400370402;
-    //產品群id
-    private $product_group_id = 1283996796;
-    //後端組id
-    private $backend_group_id = 1362366154;
-    //测试-后端
-    private $test_group_id = 1447023252;
-    //运维+后端
-    private $ops_group_id = 1283233252;
+    private $important_users = [];
+
 
 
     public function __construct($argv) {
@@ -30,24 +22,127 @@ class myProcess{
                     echo "請參考 https://my.telegram.org/auth ，創建自己的app，並存下app_id以及api_hash\n";
                     exit;
                 }else{
-                    echo "\n";
+                    $env_data = file_get_contents("env_data.json");
+                    $env_data_array = json_decode($env_data,true);
+                    echo "請輸入app_id:\n";
+                    $handle = fopen ("php://stdin","r");
+                    $line = fgets($handle);
+                    $env_data_array["app_id"] = str_replace(array("\r","\n","\r\n","\n\r"),'',$line);
+                    echo "請輸入api_hash:\n";
+                    $handle = fopen ("php://stdin","r");
+                    $line = fgets($handle);
+                    $env_data_array["api_hash"] = str_replace(array("\r","\n","\r\n","\n\r"),'',$line);
+                    echo "儲存中...\n";
+                    file_put_contents("env_data.json",json_encode($env_data_array));
+                    echo "完成\n";
                     exit;
                 }
-
-
+                echo "Do you have already get your tts_key(y/n)?";
+                if(trim($line) != 'y'){
+                    echo "請前往 https://www.voicerss.org/pricing/ 辦個帳號，申請tts服務(免費)\n";
+                    exit;
+                }else{
+                    $env_data = file_get_contents("env_data.json");
+                    $env_data_array = json_decode($env_data,true);
+                    echo "請輸入tts_key:\n";
+                    $handle = fopen ("php://stdin","r");
+                    $line = fgets($handle);
+                    $env_data_array["tts_key"] = str_replace(array("\r","\n","\r\n","\n\r"),'',$line);
+                    echo "儲存中...\n";
+                    file_put_contents("env_data.json",json_encode($env_data_array));
+                    echo "完成\n";
+                    exit;
+                }
             }
+
         }
         $client = new Predis\Client(['host' => "127.0.0.1", "port" => 6379]);
 
         $client->set("tg_listener_run",true);
+        $env_data = file_get_contents("env_data.json");
+        $env_data_array = json_decode($env_data,true);
+        $this->app_id = str_replace(array("\r","\n","\r\n","\n\r"),'',$env_data_array["app_id"]);
+        $this->api_hash = str_replace(array("\r","\n","\r\n","\n\r"),'',$env_data_array["api_hash"]);
+        if ( isset($env_data_array["tts_key"]) ){
+            $this->tts_key = $env_data_array["tts_key"];
+        }
+        if ( isset($env_data_array["important_users"]) ){
+            $this->important_users = $env_data_array["important_users"];
+        }
+        $this->important_users = $env_data_array["important_users"];
 
-        $this->app_id = 18333171;
-        $this->api_hash = 'dc8e192668840830bb8ad66c1691fa52';
         $MadelineProto = new \danog\MadelineProto\API('session.madeline',['app_info' => ['api_id' => $this->app_id, 'api_hash' => $this->api_hash], 'updates' => ['handle_updates' => false]]);
         $MadelineProto->start();
         // $MadelineProto->async(false);
         // $id =  $this->getMessages($MadelineProto);
-        
+        if ( isset($argv[1]) ){
+            if( $argv[1]=="load" ){
+                $env_data = file_get_contents("env_data.json");
+                $env_data_array = json_decode($env_data,true);
+                $me = $MadelineProto->getSelf();
+                $env_data_array['myusername'] = '@'.$me["username"];
+                file_put_contents("env_data.json",json_encode($env_data_array));
+                echo "Do you wish to load all your groupdata(y/n)?";
+                $handle = fopen ("php://stdin","r");
+                $line = fgets($handle);
+                if(trim($line) != 'y'){
+                    exit;
+                }else{
+                    file_put_contents("all_chat_data.json",json_encode($MadelineProto->messages->getAllChats()['chats']));
+                    print_r($MadelineProto->messages->getAllChats()['chats']);
+                    echo "相關資料已儲存到all_chat_data.json\n";
+                    echo "稍後請自行到該檔案中取得需要監聽的群組id，並將那些id手動新增到qq.php裡的important_groups\n";
+                    echo "要繼續取得重要人士id嗎?(y/n)\n";
+                    $handle = fopen ("php://stdin","r");
+                    $line = fgets($handle);
+                    if(trim($line) != 'y'){
+                        exit;
+                    }
+                    do{
+                        $bool_keep = true;
+                        echo "請輸入您想儲存的目標人士的tg帳號，想結束請輸入n例如 @xxxx :\n";
+                        $handle = fopen ("php://stdin","r");
+                        $line = fgets($handle);
+                        if(trim($line) == 'n'){
+                            exit;
+                        }
+                        $leader_info = $this->get_full_info($MadelineProto,str_replace(array("\r","\n","\r\n","\n\r"),'',$line));
+                        if ( isset($leader_info["User"]["id"]) ){
+                            echo "名稱:".$leader_info["User"]["first_name"]."\n";
+                            $env_data = file_get_contents("env_data.json");
+                            $env_data_array = json_decode($env_data,true);
+                            if ( isset($env_data_array["important_users"]) ){
+                                if ( !in_array($leader_info["User"]["id"],$env_data_array["important_users"]) ){
+                                    array_push($env_data_array["important_users"],$leader_info["User"]["id"]);
+                                    file_put_contents("env_data.json",json_encode($env_data_array));
+                                    echo "新增完成"."\n";
+                                }
+                                else{
+                                    echo "已存在無須再次新增"."\n";
+                                }
+                            }
+                            else{
+                                $env_data_array["important_users"]  = [$leader_info["User"]["id"],];
+                                file_put_contents("env_data.json",json_encode($env_data_array));
+                                echo "完成\n";
+                            }
+                        }
+                        else{
+                            echo "找不到該帳號\n";
+                            echo "是否結束?(y/n)\n";
+                            $handle = fopen ("php://stdin","r");
+                            $line = fgets($handle);
+                            if(trim($line) == 'y'){
+                                exit;
+                            }
+                        }
+                    }while($bool_keep);
+
+                    exit;
+                }
+            }
+
+        }
         do{
             $list_of_channels = $MadelineProto->getFullDialogs();
 
@@ -129,7 +224,7 @@ class myProcess{
                                         }
                                     }
                                     if ( $entity['_']=='messageEntityMention' ){
-                                        if ( substr($messages['message'],$entity['offset'],$entity['length'])=='@apex7414' ){
+                                        if ( substr($messages['message'],$entity['offset'],$entity['length'])==$env_data_array["myusername"] ){
                                             if ( $tmp['priority'] > 1 ){
                                                 $tmp['priority']=1;
                                             }
@@ -276,11 +371,10 @@ class myProcess{
         $command = preg_replace($pattern, ' ', $command);
         $command = str_replace(" ","",$command);
         $command = str_replace("　","",$command);
-
-        $google_tts_url = "https://api.voicerss.org/?key=9afcdd1a0e164e539f26b2c285a9282c&hl=zh-cn&c=MP3&src=".$command;
+        if ( empty($this->tts_key) ){echo "錯誤，env_data中還沒有tts_key";exit;}
+        $google_tts_url = "https://api.voicerss.org/?key=".$this->tts_key."&hl=zh-cn&c=MP3&src=".$command;
         $tts_data = $this->down_mp3($google_tts_url);
         $result = exec("py test.py");
-
     }
 
     
