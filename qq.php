@@ -19,8 +19,24 @@ class myProcess{
     private $ops_group_id = 1283233252;
 
 
-    public function __construct() {
+    public function __construct($argv) {
 
+        if ( isset($argv[1]) ){
+            if( $argv[1]=="init" ){
+                echo "Do you have already get your telegram app_id and api_hash(y/n)?";
+                $handle = fopen ("php://stdin","r");
+                $line = fgets($handle);
+                if(trim($line) != 'y'){
+                    echo "請參考 https://my.telegram.org/auth ，創建自己的app，並存下app_id以及api_hash\n";
+                    exit;
+                }else{
+                    echo "\n";
+                    exit;
+                }
+
+
+            }
+        }
         $client = new Predis\Client(['host' => "127.0.0.1", "port" => 6379]);
 
         $client->set("tg_listener_run",true);
