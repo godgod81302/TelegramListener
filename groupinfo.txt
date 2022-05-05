@@ -1,0 +1,155 @@
+ [2135734078] => Array
+        (
+            [_] => dialog
+            [pinned] => 1
+            [unread_mark] =>
+            [peer] => Array
+                (
+                    [_] => peerUser
+                    [user_id] => 2135734078
+                )
+
+            [top_message] => 52016
+            [read_inbox_max_id] => 52016
+            [read_outbox_max_id] => 0
+            [unread_count] => 0
+            [unread_mentions_count] => 0
+            [notify_settings] => Array
+                (
+                    [_] => peerNotifySettings
+                    [show_previews] => 1
+                    [silent] =>
+                    [mute_until] => 0
+                    [sound] => default
+                )
+
+            [draft] => Array
+                (
+                    [_] => draftMessageEmpty
+                    [date] => 1650629999
+                )
+
+        )
+
+    [-1001400370402] => Array
+        (
+            [_] => dialog
+            [pinned] => 1
+            [unread_mark] =>
+            [peer] => Array
+                (
+                    [_] => peerChannel
+                    [channel_id] => 1400370402
+                )
+
+            [top_message] => 96040
+            [read_inbox_max_id] => 96040
+            [read_outbox_max_id] => 96040
+            [unread_count] => 0
+            [unread_mentions_count] => 0
+            [notify_settings] => Array
+                (
+                    [_] => peerNotifySettings
+                    [show_previews] =>
+                    [silent] =>
+                )
+
+            [pts] => 103269
+            [draft] => Array
+                (
+                    [_] => draftMessageEmpty
+                    [date] => 1650872383
+                )
+
+        )
+
+    [-1001283233252] => Array
+        (
+            [_] => dialog
+            [pinned] => 1
+            [unread_mark] =>
+            [peer] => Array
+                (
+                    [_] => peerChannel
+                    [channel_id] => 1283233252
+                )
+
+            [top_message] => 44966
+            [read_inbox_max_id] => 44966
+            [read_outbox_max_id] => 44966
+            [unread_count] => 0
+            [unread_mentions_count] => 0
+            [notify_settings] => Array
+                (
+                    [_] => peerNotifySettings
+                    [show_previews] =>
+                    [silent] =>
+                    [mute_until] => 0
+                )
+
+            [pts] => 48505
+            [draft] => Array
+                (
+                    [_] => draftMessageEmpty
+                    [date] => 1650867166
+                )
+
+        )
+
+    [-1001447023252] => Array
+        (
+            [_] => dialog
+            [pinned] => 1
+            [unread_mark] =>
+            [peer] => Array
+                (
+                    [_] => peerChannel
+                    [channel_id] => 1447023252
+                )
+
+            [top_message] => 18804
+            [read_inbox_max_id] => 18804
+            [read_outbox_max_id] => 18804
+            [unread_count] => 0
+            [unread_mentions_count] => 0
+            [notify_settings] => Array
+                (
+                    [_] => peerNotifySettings
+                    [show_previews] =>
+                    [silent] =>
+                    [mute_until] => 0
+                )
+
+            [pts] => 19870
+            [draft] => Array
+                (
+                    [_] => draftMessageEmpty
+                    [date] => 1649936559
+                )
+
+        )
+
+    [5332767530] => Array
+        (
+            [_] => dialog
+            [pinned] => 1
+            [unread_mark] =>
+            [peer] => Array
+                (
+                    [_] => peerUser
+                    [user_id] => 5332767530
+                )
+
+            [top_message] => 53270
+            [read_inbox_max_id] => 53270
+            [read_outbox_max_id] => 52991
+            [unread_count] => 0
+            [unread_mentions_count] => 0
+            [notify_settings] => Array
+                (
+                    [_] => peerNotifySettings
+                    [show_previews] =>
+                    [silent] =>
+                )
+
+        )
