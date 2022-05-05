@@ -1,0 +1,2 @@
+# TelegramListener
+用來作為client端取得telegram重要通知並且實時語音提醒
