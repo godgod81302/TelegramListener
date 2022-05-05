@@ -1,6 +1,7 @@
 # TelegramListener
 用來作為client端取得telegram重要通知並且實時語音提醒
-在本地端用xampp 簡單建立一個php執行環境
+在本地端用xampp 簡單建立一個php執行環境 ，然後把此專案拉到htdoc(網頁跟目錄下)，跑一次composer install
+ps:此專案跟laravel不合，如果本來就有larvel在網頁跟目錄，請把此專案拉到public裡面再composer install
 接著在windows上安裝python環境
 可參考 https://ithelp.ithome.com.tw/articles/10210071
 
