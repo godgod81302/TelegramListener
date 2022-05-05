@@ -3,6 +3,7 @@
 在本地端用xampp 簡單建立一個php執行環境
 接著在windows上安裝python環境
 可參考 https://ithelp.ithome.com.tw/articles/10210071
+
 1.pip install playsound
 
 2.請申請tts_key https://www.voicerss.org/pricing/ 申請個免費的就可以 將api token存下來 等下執行load時會要求你輸入
